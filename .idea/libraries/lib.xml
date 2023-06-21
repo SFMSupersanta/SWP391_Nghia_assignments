@@ -1,0 +1,20 @@
+<component name="libraryTable">
+  <library name="lib">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/CodeCoach/lib/jakarta.mail-1.6.7.jar!/" />
+      <root url="jar://$PROJECT_DIR$/CodeCoach/lib/cloudinary-taglib-1.33.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/CodeCoach/lib/cloudinary-core-1.33.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/CodeCoach/lib/commons-logging-1.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/CodeCoach/lib/cloudinary-http44-1.33.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/CodeCoach/lib/httpcore-4.4.13.jar!/" />
+      <root url="jar://$PROJECT_DIR$/CodeCoach/lib/httpmime-4.5.13.jar!/" />
+      <root url="jar://$PROJECT_DIR$/CodeCoach/lib/jakarta.servlet.jsp.jstl-2.0.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/CodeCoach/lib/jakarta.servlet.jsp.jstl-api-2.0.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/CodeCoach/lib/sqljdbc42.jar!/" />
+      <root url="jar://$PROJECT_DIR$/CodeCoach/lib/commons-codec-1.11.jar!/" />
+      <root url="jar://$PROJECT_DIR$/CodeCoach/lib/httpclient-4.5.13.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
