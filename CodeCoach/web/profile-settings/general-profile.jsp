@@ -1,3 +1,5 @@
+<%@ page import="model.Users" %>
+<%@ page import="dal.TinhThanhPhoDAO" %>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -8,22 +10,21 @@
   <title>Mentoring</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
 
-  <link rel="shortcut icon" type="image/x-icon" href="assets/img/favicon.png">
+  <link rel="shortcut icon" type="image/x-icon" href="../assets/img/favicon.png">
 
-  <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+  <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/bootstrap.min.css">
 
-  <link rel="stylesheet" href="assets/plugins/fontawesome/css/fontawesome.min.css">
-  <link rel="stylesheet" href="assets/plugins/fontawesome/css/all.min.css">
+  <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/plugins/fontawesome/css/fontawesome.min.css">
+  <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/plugins/fontawesome/css/all.min.css">
 
-  <link rel="stylesheet" href="assets/css/bootstrap-datetimepicker.min.css">
+  <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/bootstrap-datetimepicker.min.css">
 
-  <link rel="stylesheet" href="assets/plugins/select2/css/select2.min.css">
+  <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/plugins/select2/css/select2.min.css">
 
-  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/style.css">
 </head>
 
 <body>
-<%@page errorPage="../500error.jsp" %>
 <div class="main-wrapper">
 
   <!-- Header is placed here -->
@@ -55,24 +56,7 @@
 
           <div class="profile-sidebar">
             <div class="user-widget">
-              <div class="pro-avatar">JD</div>
-              <div class="rating">
-                <i class="fas fa-star filled"></i>
-                <i class="fas fa-star filled"></i>
-                <i class="fas fa-star filled"></i>
-                <i class="fas fa-star filled"></i>
-                <i class="fas fa-star"></i>
-              </div>
-              <div class="user-info-cont">
-                <h4 class="usr-name">Jonathan Doe</h4>
-                <p class="mentor-type">English Literature (M.A)</p>
-              </div>
-            </div>
-            <div class="progress-bar-custom">
-              <h6>Complete your profiles ></h6>
-              <div class="pro-progress">
-                <div class="tooltip-toggle" tabindex="0"></div>
-                <div class="tooltip">80%</div>
+              <div class="pro-avatar"><c:out value="${users.fName.charAt(0)}" /><c:out value="${users.lName.charAt(1)}" />
               </div>
             </div>
             <div class="custom-sidebar-nav">
@@ -83,13 +67,7 @@
                         class="fas fa-chevron-right"></i></span></a></li>
                 <li><a href="schedule-timings.html"><i class="fas fa-hourglass-start"></i>Schedule
                   Timings <span><i class="fas fa-chevron-right"></i></span></a></li>
-                <li><a href="chat.html"><i class="fas fa-comments"></i>Messages <span><i
-                        class="fas fa-chevron-right"></i></span></a></li>
-                <li><a href="blog.html"><i class="fab fa-blogger-b"></i>Blog <span><i
-                        class="fas fa-chevron-right"></i></span></a></li>
-                <li><a href="profile.html"><i class="fas fa-user-cog"></i>Profile <span><i
-                        class="fas fa-chevron-right"></i></span></a></li>
-                <li><a href="login.html"><i class="fas fa-sign-out-alt"></i>Logout <span><i
+                <li><a href="logout"><i class="fas fa-sign-out-alt"></i>Logout <span><i
                         class="fas fa-chevron-right"></i></span></a></li>
               </ul>
             </div>
@@ -100,110 +78,98 @@
         <div class="col-md-7 col-lg-8 col-xl-9">
           <div class="card">
             <div class="card-body">
-
-              <form>
+              <form action="general-profile" method="post">
                 <div class="row form-row">
-                  <div class="col-12 col-md-12">
-                    <div class="form-group">
-                      <div class="change-avatar">
-                        <div class="profile-img">
-                          <img src="assets/img/user/user.jpg" alt="User Image">
-                        </div>
-                        <div class="upload-img">
-                          <div class="change-photo-btn">
-                            <span><i class="fa fa-upload"></i> Upload Photo</span>
-                            <input type="file" class="upload">
-                          </div>
-                          <small class="form-text text-muted">Allowed JPG, GIF or PNG. Max
-                            size of 2MB</small>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+
                   <div class="col-12 col-md-6">
                     <div class="form-group">
                       <label>First Name</label>
-                      <input type="text" class="form-control" value="Jonathan">
+                      <input name="first_name" type="text" class="form-control" value="${sessionScope.users.fName}">
                     </div>
                   </div>
                   <div class="col-12 col-md-6">
                     <div class="form-group">
                       <label>Last Name</label>
-                      <input type="text" class="form-control" value="Doe">
+                      <input name="last_name" type="text" class="form-control" value="${sessionScope.users.lName}">
+                    </div>
+                  </div>
+
+                  <div class="col-12">
+                    <div class="form-group" >
+                      Gender :
+                      <label for="male">Male</label>
+                      <input class="form-check-input" type="radio" id="male" name="gender" value="Male" <%if(((Users) session.getAttribute("users")).getGender().equals("Male")){%> checked <%}%> >
+
+                      <label for="female">Female</label>
+                      <input class="form-check-input" type="radio" id="female" name="gender" value="Female" <%if(((Users) session.getAttribute("users")).getGender().equals("Female")){%> checked <%}%>>
+                    </div>
+                  </div>
+
+                  <div class="col-12 col-md-6">
+                    <div class="form-group">
+                      <label>Email</label>
+                      <input readonly name="email" type="email" class="form-control"
+                             value="<%=((Users) session.getAttribute("users")).getEmail()%>">
+                    </div>
+                  </div>
+
+
+                  <div class="col-12 col-md-6">
+                    <div class="form-group" >
+                      <label>Facebook</label>
+                      <input name="facebook" type="text" class="form-control"
+                             value="<%=(((Users) session.getAttribute("users")).getFacebook())%>">
+                    </div>
+                  </div>
+
+                  <div class="col-12 col-md-6">
+                    <div class="form-group">
+                      <label>Mobile</label>
+                      <input name="phone_number" type="text" value="<%=((Users) session.getAttribute("users")).getPhoneNum()%>" class="form-control">
                     </div>
                   </div>
                   <div class="col-12 col-md-6">
                     <div class="form-group">
-                      <label>Date of Birth</label>
-                      <div class="cal-icon">
-                        <input type="text" class="form-control datetimepicker"
-                               value="24-07-1983">
-                      </div>
+                      <label>Address</label>
+                      <input name="address" type="text" value="<%=((Users) session.getAttribute("users")).getAddress()%>" class="form-control">
                     </div>
                   </div>
+
+                  <div class="col-12">
+                    <div class="form-group">
+                      <label>Current District-City</label>
+                      <input readonly name="current_district" type="email" class="form-control"
+                             value="<%=new TinhThanhPhoDAO().getTTPNameAndQHName(((Users) session.getAttribute("users")).getUserId())%>">
+                    </div>
+                  </div>
+
                   <div class="col-12 col-md-6">
                     <div class="form-group">
-                      <label>Blood Group</label>
-                      <select class="form-control select">
-                        <option>A-</option>
-                        <option>A+</option>
-                        <option>B-</option>
-                        <option>B+</option>
-                        <option>AB-</option>
-                        <option>AB+</option>
-                        <option>O-</option>
-                        <option>O+</option>
+                      <label>City</label>
+                      <select class="form-select" name="" id="cityList" onchange="changeCity()" required>
+                        <option value="" selected=""></option>
+                        <c:forEach items="${requestScope.listCity}" var="i">
+                          <option value="${i.mattp}">${i.name}</option>
+                        </c:forEach>
                       </select>
                     </div>
                   </div>
                   <div class="col-12 col-md-6">
                     <div class="form-group">
-                      <label>Email ID</label>
-                      <input type="email" class="form-control"
-                             value="jonathandoe@example.com">
-                    </div>
-                  </div>
-                  <div class="col-12 col-md-6">
-                    <div class="form-group">
-                      <label>Mobile</label>
-                      <input type="text" value="+1 202-555-0125" class="form-control">
-                    </div>
-                  </div>
-                  <div class="col-12">
-                    <div class="form-group">
-                      <label>Address</label>
-                      <input type="text" class="form-control" value="806 Twin Willow Lane">
-                    </div>
-                  </div>
-                  <div class="col-12 col-md-6">
-                    <div class="form-group">
-                      <label>City</label>
-                      <input type="text" class="form-control" value="Old Forge">
-                    </div>
-                  </div>
-                  <div class="col-12 col-md-6">
-                    <div class="form-group">
                       <label>State</label>
-                      <input type="text" class="form-control" value="Newyork">
+                      <label class="form-control-label">District</label>
+                      <select class="form-select" name="district" id="district" style="display: none" required>
+                        <option value="${sessionScope.users.maqh}">${sessionScope.users.maqh}</option>
+                      </select>
                     </div>
                   </div>
-                  <div class="col-12 col-md-6">
-                    <div class="form-group">
-                      <label>Zip Code</label>
-                      <input type="text" class="form-control" value="13420">
-                    </div>
-                  </div>
-                  <div class="col-12 col-md-6">
-                    <div class="form-group">
-                      <label>Country</label>
-                      <input type="text" class="form-control" value="United States">
-                    </div>
-                  </div>
+
                 </div>
                 <div class="submit-section">
                   <button type="submit" class="btn btn-primary submit-btn">Save Changes</button>
                 </div>
               </form>
+
 
             </div>
           </div>
@@ -220,21 +186,73 @@
 </div>
 
 
-<script data-cfasync="false" src="../../cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+<script type="text/javascript">
+  function changeCity() {
+    $.ajax({
+              type: 'POST',
+              data: {
+                id: $('#cityList').val()
+              },
+              url: '${pageContext.request.contextPath}/chooseDistrict',
+              success: function (data, textStatus, jqXHR) {
+                if ($('#cityList').val() !== '') {
+                  $('#district').css("display", "inline");
+                } else {
+                  $('#district').css("display", "none");
+                }
+                $('#district').html(data)
+              }
+            }
+    )
+  }
+
+  function checkEmailExisted() {
+    $.ajax({
+              type: 'POST',
+              data: {
+                email: $('#email').val()
+              },
+              url: '${pageContext.request.contextPath}/checkEmailExisted',
+              success: function (data, textStatus, jqXHR) {
+                if(data){
+                  $('#error').html(data);
+                  $('#submit').prop('disabled',true);
+                }
+                else {
+                  $('#error').html('');
+                  $('#submit').removeAttr('disabled')
+                }
+              }
+            }
+    )
+  }
+</script>
+
+<script>
+  function validatePassword() {
+    var password = document.getElementById("password").value;
+    var confirmPassword = document.getElementById("password-confirm").value;
+    var message = document.getElementById("message");
+
+    if (password !== confirmPassword) {
+      message.style.color = "red";
+      message.innerHTML = "Password Confirm is not match  ! Please re-enter.";
+      return false; // Ng?n ch?n g?i form
+    }
+    else{
+      message.innerHTML = '';
+      return true;
+    }
+
+  }
+</script>
 <script src="assets/js/jquery-3.6.0.min.js"></script>
 
 <script src="assets/js/bootstrap.bundle.min.js"></script>
 
-<script src="assets/plugins/select2/js/select2.min.js"></script>
-
-<script src="assets/js/moment.min.js"></script>
-<script src="assets/js/bootstrap-datetimepicker.min.js"></script>
-
-<script src="assets/plugins/theia-sticky-sidebar/ResizeSensor.js"></script>
-<script src="assets/plugins/theia-sticky-sidebar/theia-sticky-sidebar.js"></script>
-
 <script src="assets/js/script.js"></script>
 </body>
+
 
 <!-- Mirrored from mentoring.dreamguystech.com/html/template/profile-settings.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 14 May 2023 10:32:22 GMT -->
 

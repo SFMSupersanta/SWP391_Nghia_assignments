@@ -5,13 +5,19 @@
 
 package controller.general;
 
+import dal.TinhThanhPhoDAO;
+import dal.UserDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import model.TinhThanhPho;
+import model.Users;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  *
@@ -32,9 +38,11 @@ public class GeneralProfileController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.getRequestDispatcher("printinvoice.jsp").forward(request, response);
 
-        String go = request.getParameter("go");
+        TinhThanhPhoDAO dao = new TinhThanhPhoDAO();
+        List<TinhThanhPho> list = dao.getAllTinhThanhPho();
+        request.setAttribute("listCity", list);
+        request.getRequestDispatcher("profile-settings/general-profile.jsp").forward(request, response);
 
     }
 
@@ -48,7 +56,35 @@ public class GeneralProfileController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        String fName = request.getParameter("first_name");
+        String lName = request.getParameter("last_name");
+        String gender = request.getParameter("gender");
+        String email = request.getParameter("email");
+        String phoneNum = request.getParameter("phone_number");
+        String address = request.getParameter("address");
+        String facebook = request.getParameter("facebook");
+        String maqh = request.getParameter("district");
+        Users user = new Users();
+        if("".equals(maqh) || maqh == null)
+            maqh = ((Users) request.getSession().getAttribute("users")).getMaqh();
+        user.setMaqh(maqh);
+        user.setfName(fName);
+        user.setlName(lName);
+        user.setPhoneNum(phoneNum);
+        user.setAddress(address);
+        user.setGender(gender);
+        user.setEmail(email);
+        user.setFacebook(facebook);
+        user.setPassword(((Users) request.getSession().getAttribute("users")).getPassword());
+        user.setUserId(((Users) request.getSession().getAttribute("users")).getUserId());
+        user.setRoleId(((Users) request.getSession().getAttribute("users")).getRoleId());
+        user.setStatusId(((Users) request.getSession().getAttribute("users")).getStatusId());
+        UserDAO dao = new UserDAO();
+        dao.updateUsers(user);
+        HttpSession session = request.getSession();
+        session.setAttribute("users", user);
 
+        response.sendRedirect(request.getContextPath() + "/home");
     }
 
     /**

@@ -12,19 +12,19 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
         <title>CodeCoach</title>
 
-        <link rel="shortcut icon" type="image/x-icon" href="assets/img/favicon.png">
+        <link rel="shortcut icon" type="image/x-icon" href="../assets/img/favicon.png">
 
-        <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/bootstrap.min.css">
 
-        <link rel="stylesheet" href="assets/plugins/fontawesome/css/fontawesome.min.css">
-        <link rel="stylesheet" href="assets/plugins/fontawesome/css/all.min.css">
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/plugins/fontawesome/css/fontawesome.min.css">
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/plugins/fontawesome/css/all.min.css">
 
-        <link rel="stylesheet" href="assets/css/owl.carousel.min.css">
-        <link rel="stylesheet" href="assets/css/owl.theme.default.min.css">
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/owl.carousel.min.css">
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/owl.theme.default.min.css">
 
-        <link rel="stylesheet" href="assets/plugins/aos/aos.css">
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/plugins/aos/aos.css">
 
-        <link rel="stylesheet" href="assets/css/style.css">
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/style.css">
         <script defer src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     </head>
     <body>
@@ -113,17 +113,14 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <c:forEach items="${requestScope.listBooking}" var="m">
+                                                    <c:forEach items="${requestScope.mentorBookings}" var="booking">
                                                         <tr>
                                                             <td>
-                                                                <h2 class="table-avatar">
-                                                                    <a href="#" class="avatar avatar-sm me-2"><img class="avatar-img rounded-circle" src="assets/img/user/user2.jpg" alt="User Image"></a>
-                                                                    <a href="#">${m.getUsers().fName} ${m.getUsers().lName}<span><span class="__cf_email__" data-cfemail="f5818c879a9b90879a9790878186b594919a9790db969a98">[email&#160;protected]</span></span></a>
-                                                                </h2>
+                                                                ${booking.menteeName}
                                                             </td>
-                                                            <td>${m.getBookingDetails().date}</td>
-                                                            <td class="text-center"><span class="pending">${m.getSlot().getStartTime()} - ${m.getSlot().getEndTime()}</span></td>
-                                                            <td class="text-center"><a href="profile-mentee.html" class="btn btn-sm bg-info-light"><i class="far fa-eye"></i> View</a></td>
+                                                            <td>${booking.date}</td>
+                                                            <td class="text-center"><span class="pending">${booking.startTime} - ${booking.endTime}</span></td>
+                                                            <td class="text-center"><a href="profile-mentee.html" class="btn btn-sm bg-info-light"><i class="far fa-eye"></i>${booking.status}</a></td>
                                                         </tr>
                                                     </c:forEach>
                                                 </tbody>
@@ -146,14 +143,14 @@
 
 
         <script data-cfasync="false" src="../../cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
-        <script src="assets/js/jquery-3.6.0.min.js"></script>
+        <script src="../assets/js/jquery-3.6.0.min.js"></script>
 
-        <script src="assets/js/bootstrap.bundle.min.js"></script>
+        <script src="../assets/js/bootstrap.bundle.min.js"></script>
 
-        <script src="assets/js/owl.carousel.min.js"></script>
+        <script src="../assets/js/owl.carousel.min.js"></script>
 
-        <script src="assets/plugins/aos/aos.js"></script>
+        <script src="../assets/plugins/aos/aos.js"></script>
 
-        <script src="assets/js/script.js"></script>
+        <script src="../assets/js/script.js"></script>
     </body>
 </html>

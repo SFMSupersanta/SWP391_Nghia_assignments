@@ -1,4 +1,5 @@
 ﻿-- Insert data into UserStatus table
+-- Select * from users
 USE CodeCoach
 INSERT INTO UserStatus (statusName)
 VALUES

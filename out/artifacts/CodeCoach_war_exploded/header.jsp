@@ -39,10 +39,10 @@
                                     <ul class="submenu">
                                         <li><a href="mentordashboard">Mentor Dashboard</a></li>
                                         <li><a href="">Notification</a></li>
-                                        <li><a href="">View Booking</a></li>
+                                        <li><a href="mentor-booking">View Booking</a></li>
                                         <li><a href="">Review</a></li>
                                         <li><a href="">Invoices</a></li>
-                                        <li><a href="">Profile Settings</a></li>                                      
+                                        <li><a href="mentor-profile?go=edit-profile">Profile Settings</a></li>
                                     </ul>
                                 </li>
                             </c:if>
@@ -56,7 +56,7 @@
                                     <li><a href="booking.jsp">Booking</a></li>
                                     <li><a href="">Favourites</a></li>
                                     <li><a href="">Invoices</a></li>
-                                    <li><a href="">Profile Settings</a></li>
+                                    <li><a href="mentee-profile?go=edit-profile">Profile Settings</a></li>
                                     <c:if test="${users.userId==3}">
                                         <li><a href="mentorregister">Mentor Register</a></li>
                                     </c:if>
@@ -73,6 +73,7 @@
                             <li class="has-submenu">
                                 <a href="contactus">Contact Us <i class="fas "></i></a>
                             </li>
+
                             <!--Admin button-->
                             <c:if test="${users.roleId == 1}">
                                 <li>
@@ -108,7 +109,7 @@
                                         </div>
                                     </div>
                                     <a class="dropdown-item" href="">Dashboard</a>
-                                    <a class="dropdown-item" href="">Profile Settings</a>
+                                    <a class="dropdown-item" href="general-profile?go=edit-profile&user-id">Profile Settings</a>
                                     <a class="dropdown-item" href="changepassword.jsp">Change Password</a>
                                     <a class="dropdown-item" href="logout">Logout</a>
                                 </div>

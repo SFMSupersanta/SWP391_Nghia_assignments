@@ -4,13 +4,13 @@
  */
 package dal;
 
+import model.Skills;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
-import model.Roles;
-import model.Skills;
 
 /**
  *
@@ -21,6 +21,23 @@ public class SkillDAO {
     Connection conn = null;
     PreparedStatement ps = null;
     ResultSet rs = null;
+
+    private final String getSkillBySkillId = "SELECT * FROM [dbo].[Skills] WHERE skillId = ?";
+
+    public Skills getSkillBySkillId(int skillId) {
+        Skills skill = new Skills();
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(getSkillBySkillId);
+            ps.setInt(1, skillId);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                skill = new Skills(rs.getInt(1), rs.getString(2), rs.getInt(3));
+            }
+        } catch (Exception e) {
+        }
+        return skill;
+    }
     
     public List<Skills> getAll() {
         List<Skills> list = new ArrayList<>();

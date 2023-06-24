@@ -4,14 +4,15 @@
  */
 package dal;
 
+import model.Roles;
+import model.Users;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import model.Roles;
-import model.Users;
 
 /**
  *
@@ -22,6 +23,87 @@ public class UserDAO extends DBContext {
     Connection conn = null;
     PreparedStatement ps = null;
     ResultSet rs = null;
+
+    private final String GET_USER_BY_ID = "SELECT * FROM Users WHERE userId = ?";
+
+    public Users getUserById(int userId) {
+        Users user = new Users();
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(GET_USER_BY_ID);
+            ps.setInt(1, userId);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                user = new Users(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5),
+                        rs.getString(6), rs.getString(7), rs.getInt(8), rs.getInt(9), rs.getString(10), rs.getString(11),
+                        rs.getString(12));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return user;
+    }
+
+    public static void main(String[] args) {
+        // Test updateUsers
+        //private int userId;
+        //    private String email;
+        //    private String password;
+        //    private String fName;
+        //    private String lName;
+        //    private String gender;
+        //    private String phoneNum;
+        //    private int roleId;
+        //    private int statusId;
+        //    private String address;
+        //    private String maqh;
+        //    private String facebook;
+        UserDAO dao = new UserDAO();
+        Users user = new Users();
+        user.setUserId(1);
+        user.setEmail("changed");
+        user.setPassword("changed");
+        user.setfName("changed");
+        user.setlName("changed");
+        user.setGender("changed");
+        user.setPhoneNum("276");
+        user.setRoleId(1);
+        user.setStatusId(1);
+        user.setAddress("changed");
+        user.setMaqh("276");
+        user.setFacebook("changed");
+
+
+        System.out.println(dao.updateUsers(user) + " row(s) updated");
+    }
+
+    private final String EDIT_USER_PROFILE_SQL = "UPDATE Users SET email = ?, [password] = ?, fName = ?, lName = ?, gender = ?, phoneNum = ?, roleId = ?, statusId = ?, address = ?, maqh = ?, facebook = ? WHERE userId = ?;\n";
+
+    public int updateUsers(Users user){
+        int result = 0;
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(EDIT_USER_PROFILE_SQL);
+            ps.setString(1, user.getEmail());
+            ps.setString(2, user.getPassword());
+            ps.setString(3, user.getfName());
+            ps.setString(4, user.getlName());
+            ps.setString(5, user.getGender());
+            ps.setString(6, user.getPhoneNum());
+            ps.setInt(7, user.getRoleId());
+            ps.setInt(8, user.getStatusId());
+            ps.setString(9, user.getAddress());
+            ps.setString(10, user.getMaqh());
+            ps.setString(11, user.getFacebook());
+            ps.setInt(12, user.getUserId());
+            result = ps.executeUpdate();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
 
     
      public List<Users> getAllUser() {
@@ -276,11 +358,6 @@ public class UserDAO extends DBContext {
 
         }
         return o;
-    }
-     
-    public static void main(String[] args) {
-        UserDAO dao = new UserDAO();
-        System.out.println(dao.getUserNameByUserId(1));
     }
 
     public String getUserNameByUserId(int userId) {

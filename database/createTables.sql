@@ -1,4 +1,15 @@
+-- SELECT * FROM USERS
 -- CREATE DATABASE CodeCoach
+
+/*
+select qh_name.name as qh_name, ttp.name as tp_name from (SELECT qh.name, qh.mattp
+FROM Users u
+JOIN quanhuyen qh ON u.maqh = qh.maqh
+WHERE u.userId = 1) as qh_name join tinhthanhpho ttp on qh_name.mattp = ttp.mattp
+
+ */
+
+
 USE CodeCoach
 
 

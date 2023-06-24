@@ -4,17 +4,13 @@
  */
 package dal;
 
+import model.Mentors;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
-import static java.util.Collections.list;
 import java.util.List;
-import model.Mentors;
-import model.Skills;
-import java.util.HashMap;
-import java.util.Map;
-import model.Users;
 
 /**
  *
@@ -25,6 +21,23 @@ public class MentorDAO {
     Connection conn = null;
     PreparedStatement ps = null;
     ResultSet rs = null;
+
+    private String GET_MENTOR_BY_USER_ID = "SELECT * FROM [dbo].[Mentors] WHERE userId = ?";
+
+    public Mentors getMentorByUserId(int userId) {
+        Mentors mentor = new Mentors();
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(GET_MENTOR_BY_USER_ID);
+            ps.setInt(1, userId);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                mentor = new Mentors(rs.getInt(1), rs.getInt(2), rs.getString(3), rs.getString(4));
+            }
+        } catch (Exception e) {
+        }
+        return mentor;
+    }
 
     public List<Mentors> getAll() {
         List<Mentors> list = new ArrayList<>();
