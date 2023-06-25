@@ -23,13 +23,6 @@ public class BookingDAO {
 
     private final String GET_BOOKING_BY_MENTOR_ID = "SELECT * FROM [dbo].[Booking] WHERE mentorId = ?";
 
-    public static void main(String[] args) {
-        //Test getBookingMentorId
-        ArrayList<Booking> list = new BookingDAO().getBookingMentorId(1);
-        for (Booking b : list) {
-            System.out.println(b);
-        }
-    }
 
     public ArrayList<Booking> getBookingMentorId(int mentorId) {
         ArrayList<Booking> list = new ArrayList<>();
@@ -60,5 +53,23 @@ public class BookingDAO {
         } catch (Exception e) {
         }
         return b;
+    }
+
+    public void updateBookingStatus(int bookingId, String status) {
+        String querry = "UPDATE [dbo].[Booking] SET status = ? WHERE bookingId = ?";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(querry);
+            ps.setString(1, status);
+            ps.setInt(2, bookingId);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void main(String[] args) {
+        //test updateBookingStatus
+        new BookingDAO().updateBookingStatus(1, "Pending");
     }
 }

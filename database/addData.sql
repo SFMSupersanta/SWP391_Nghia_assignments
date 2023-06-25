@@ -1,5 +1,6 @@
 ﻿-- Insert data into UserStatus table
--- Select * from users
+-- Select * from Booking
+
 USE CodeCoach
 INSERT INTO UserStatus (statusName)
 VALUES
