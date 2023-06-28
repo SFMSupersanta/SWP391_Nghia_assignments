@@ -4,6 +4,7 @@
  */
 package dal;
 
+import controller.booking.Utilities;
 import model.QuanHuyen;
 import model.TinhThanhPho;
 
@@ -46,7 +47,7 @@ public class TinhThanhPhoDAO {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return result;
+        return Utilities.convertToNonDiacritics(result);
     }
 
     public List<TinhThanhPho> getAllTinhThanhPho() {
