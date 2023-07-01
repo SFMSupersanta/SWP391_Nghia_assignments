@@ -11,7 +11,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
-import model.Booking;
 
 /**
  *
@@ -24,9 +23,53 @@ public class BookingDAO {
     ResultSet rs = null;
 
     private final String GET_BOOKING_BY_MENTOR_ID = "SELECT * FROM [dbo].[Booking] WHERE mentorId = ?";
+    private final String ADD_BOOKING = "INSERT INTO [dbo].[Booking] (mentorId, menteeId, skillId, status) VALUES (?,?,?,?)";
+
+    private final String GET_BOOKINGID_BY_BOOKING = "SELECT * FROM [dbo].[Booking] WHERE mentorId = ? AND menteeId = ? AND skillId = ? AND status = ?";
+
+    public static void main(String[] args) {
+        Booking b = new Booking(1, 3, 13, "Pending");
+        System.out.println(new BookingDAO().addBooking(b));
+        System.out.println("The id is: " + new BookingDAO().getBookingIdByBooking(b));
+
+    }
+
+    public int getBookingIdByBooking(Booking booking) {
+        try (Connection conn = new DBContext().getConnection();
+             PreparedStatement ps = conn.prepareStatement(GET_BOOKINGID_BY_BOOKING)) {
+            ps.setInt(1, booking.getMentorId());
+            ps.setInt(2, booking.getMenteeId());
+            ps.setInt(3, booking.getSkillId());
+            ps.setString(4, booking.getStatus());
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("bookingId");
+            }
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return 0;
+    }
 
 
-    public ArrayList<Booking> getBookingMentorId(int mentorId) {
+
+    public int addBooking(Booking booking) {
+        try (Connection conn = new DBContext().getConnection();
+             PreparedStatement ps = conn.prepareStatement(ADD_BOOKING)) {
+            ps.setInt(1, booking.getMentorId());
+            ps.setInt(2, booking.getMenteeId());
+            ps.setInt(3, booking.getSkillId());
+            ps.setString(4, booking.getStatus());
+            return ps.executeUpdate();
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return 0;
+    }
+
+        public ArrayList<Booking> getBookingMentorId(int mentorId) {
         ArrayList<Booking> list = new ArrayList<>();
         try {
             conn = new DBContext().getConnection();

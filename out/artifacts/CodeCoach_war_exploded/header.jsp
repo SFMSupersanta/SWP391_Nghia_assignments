@@ -53,7 +53,7 @@
                                 <ul class="submenu">
                                     <li><a href="menteedashboard">Mentee Dashboard</a></li>
                                     <li><a href="">Notification</a></li>
-                                    <li><a href="booking.jsp">Booking</a></li>
+                                    <li><a href="book">Booking</a></li>
                                     <li><a href="">Favourites</a></li>
                                     <li><a href="">Invoices</a></li>
                                     <li><a href="">Profile Settings</a></li>

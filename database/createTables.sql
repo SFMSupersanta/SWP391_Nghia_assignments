@@ -1,4 +1,4 @@
--- SELECT * FROM USERS
+-- SELECT * FROM slot
 -- CREATE DATABASE CodeCoach
 
 /*

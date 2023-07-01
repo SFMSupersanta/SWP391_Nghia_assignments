@@ -11,8 +11,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
-import model.Roles;
-import model.Skills;
 
 /**
  *
@@ -25,6 +23,26 @@ public class SkillDAO {
     ResultSet rs = null;
 
     private final String getSkillBySkillId = "SELECT * FROM [dbo].[Skills] WHERE skillId = ?";
+
+    public static void main(String[] args) {
+        System.out.println(new SkillDAO().getSkillIdByName("Java"));
+    }
+    public int getSkillIdByName(String skillName){
+        int skillId = 0;
+        String querry = "SELECT skillId FROM [dbo].[Skills] WHERE skillName = ?";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(querry);
+            ps.setString(1, skillName);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
 
     public Skills getSkillBySkillId(int skillId) {
         Skills skill = new Skills();
@@ -123,12 +141,4 @@ public class SkillDAO {
         return list;
     }
 
-    public static void main(String[] args) {
-        SkillDAO dao = new SkillDAO();
-        List<Object[]> list = dao.getTop5MostBookedSkills();
-        for (Object[] objects : list) {
-            System.out.println(objects[0] +" "+objects[1]);
-        }
-
-    }
 }

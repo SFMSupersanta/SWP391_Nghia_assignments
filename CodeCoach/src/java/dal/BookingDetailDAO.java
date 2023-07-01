@@ -4,12 +4,14 @@
  */
 package dal;
 
+import model.BookingDetails;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import model.BookingDetails;
 
 /**
  *
@@ -20,6 +22,24 @@ public class BookingDetailDAO {
     Connection conn = null;
     PreparedStatement ps = null;
     ResultSet rs = null;
+
+    private final String ADD_BOOKING_DETAIL = "INSERT INTO [dbo].[BookingDetails] (bookingId, slotId, date) VALUES (?,?,?)";
+
+    public int addBookingDetail(BookingDetails bookingDetails){
+        try(Connection conn = new DBContext().getConnection();
+            PreparedStatement ps = conn.prepareStatement(ADD_BOOKING_DETAIL)) {
+            ps.setInt(1, bookingDetails.getBookingId());
+            ps.setInt(2, bookingDetails.getSlotId());
+            ps.setString(3, bookingDetails.getDate());
+            return ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        return 0;
+    }
 
     public BookingDetails getBookingDetailbyBookingId(int bookingId) {
         BookingDetails bookingdetail = new BookingDetails();
