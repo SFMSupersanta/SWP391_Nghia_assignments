@@ -1,4 +1,6 @@
 ﻿-- Insert data into UserStatus table
+-- Select * from users
+USE CodeCoach
 INSERT INTO UserStatus (statusName)
 VALUES
   ('Active'),
@@ -101,10 +103,6 @@ VALUES
   (2, 12),
   (2, 22);
 
-  -- Insert data into Mentees table
-INSERT INTO Mentees (userId)
-VALUES
-  (3);
 
   -- Insert data into MenteeInterests table
 INSERT INTO MenteeInterests (menteeId, skillId)
@@ -126,17 +124,17 @@ VALUES
 INSERT INTO Booking (mentorId, menteeId, skillId, status)
 VALUES
   (1, 1, 13, 'Accepted'),
-  (1, 1, 14, 'Pending'),
-  (2, 1, 1, 'Accepted'),
-  (2, 1, 2, 'Rejected'),
+  (1, 2, 14, 'Pending'),
+  (2, 3, 1, 'Accepted'),
+  (2, 4, 2, 'Rejected'),
   (2, 1, 3, 'Pending'),
-  (1, 1, 1, 'Accepted'),
-  (2, 1, 5, 'Pending'),
-  (1, 1, 13, 'Rejected'),
-  (2, 1, 22, 'Rejected'),
-  (1, 1, 14, 'Pending'),
-  (2, 1, 12, 'Rejected'),
-  (1, 1, 13, 'Pending');
+  (1, 2, 1, 'Accepted'),
+  (2, 3, 5, 'Pending'),
+  (1, 4, 13, 'Rejected'),
+  (2, 3, 22, 'Rejected'),
+  (1, 2, 14, 'Pending'),
+  (2, 3, 12, 'Rejected'),
+  (1, 3, 13, 'Pending');
   
 
   -- Insert data into BookingDetails table
@@ -197,6 +195,7 @@ VALUES
   (12, 3, '2023-12-10'),
   (12, 5, '2023-12-12'),
   (12, 7, '2023-12-15');
+
   -- Insert data into Feedback table
 INSERT INTO Feedback (menteeId, mentorId, bookingId, rating, reviewText, reviewDateTime)
 VALUES
@@ -255,3 +254,9 @@ INSERT INTO PrivacyPolicyAndTerms VALUES(2, 2, 'Tutoring Services','Our tutoring
 INSERT INTO PrivacyPolicyAndTerms VALUES(3, 2, 'Intellectual Property','All intellectual property rights, including copyrights and trademarks, related to our tutoring system and website content, belong to us or our licensors. You may not reproduce, modify, distribute, or use any of our intellectual property without prior written permission.'); 
 INSERT INTO PrivacyPolicyAndTerms VALUES(4, 2, 'Limitation of Liability','We strive to provide accurate and reliable information; however, we do not warrant the completeness, accuracy, or reliability of any information on our website or provided through our tutoring system. We are not liable for any direct, indirect, incidental, or consequential damages resulting from the use or inability to use our tutoring services or any information obtained from our website.'); 
 INSERT INTO PrivacyPolicyAndTerms VALUES(5, 2, 'Amendments','We reserve the right to modify or update this Privacy Policy and Terms and Conditions at any time without prior notice. Any changes to these policies will be effective immediately upon posting on our website. It is your responsibility to review these policies periodically to stay informed of any updates.'); 
+
+INSERT INTO ContactUs (infor, href)
+VALUES ('FPT University Thach That, Hanoi, Vietnam', 'https://goo.gl/maps/46NsiFijUrQ5kV1J6'),
+       ('+84 79 6428 094', 'tel://1234567920'),
+       ('codecoach.project@gmail.com', 'mailto:codecoach.project@gmail.com'),
+       ('CodeCoach.com', 'https://codecoach.com');
