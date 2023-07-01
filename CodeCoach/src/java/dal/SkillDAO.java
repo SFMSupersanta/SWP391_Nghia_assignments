@@ -120,6 +120,22 @@ public class SkillDAO {
         }
         return list;
     }
-    
 
+    private static String GET_SKILLID_BY_NAME = "SELECT skillId FROM Skills WHERE skillName = ?";
+
+    public int getSkillIdByName(String skill) {
+        int skillId = 0;
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(GET_SKILLID_BY_NAME);
+            ps.setString(1, skill);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                skillId = rs.getInt("skillId");
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return skillId;
+    }
 }

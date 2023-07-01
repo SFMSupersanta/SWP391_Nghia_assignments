@@ -13,8 +13,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import model.Roles;
-import model.Users;
 
 /**
  *
@@ -74,53 +72,6 @@ public class UserDAO extends DBContext {
         return user;
     }
 
-    private final String GET_USER_BY_ID = "SELECT * FROM Users WHERE userId = ?";
-
-    public Users getUserById(int userId) {
-        Users user = new Users();
-        try {
-            conn = new DBContext().getConnection();
-            ps = conn.prepareStatement(GET_USER_BY_ID);
-            ps.setInt(1, userId);
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                user = new Users(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5),
-                        rs.getString(6), rs.getString(7), rs.getInt(8), rs.getInt(9), rs.getString(10), rs.getString(11),
-                        rs.getString(12));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return user;
-    }
-
-    private final String EDIT_USER_PROFILE_SQL = "UPDATE Users SET email = ?, [password] = ?, fName = ?, lName = ?, gender = ?, phoneNum = ?, roleId = ?, statusId = ?, address = ?, maqh = ?, facebook = ? WHERE userId = ?;\n";
-
-    public int updateUsers(Users user){
-        int result = 0;
-        try {
-            conn = new DBContext().getConnection();
-            ps = conn.prepareStatement(EDIT_USER_PROFILE_SQL);
-            ps.setString(1, user.getEmail());
-            ps.setString(2, user.getPassword());
-            ps.setString(3, user.getfName());
-            ps.setString(4, user.getlName());
-            ps.setString(5, user.getGender());
-            ps.setString(6, user.getPhoneNum());
-            ps.setInt(7, user.getRoleId());
-            ps.setInt(8, user.getStatusId());
-            ps.setString(9, user.getAddress());
-            ps.setString(10, user.getMaqh());
-            ps.setString(11, user.getFacebook());
-            ps.setInt(12, user.getUserId());
-            result = ps.executeUpdate();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return result;
-    }
 
 
      public List<Users> getAllUser() {

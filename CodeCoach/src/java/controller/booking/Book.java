@@ -2,6 +2,7 @@ package controller.booking;
 
 import dal.BookingDAO;
 import dal.BookingDetailDAO;
+import dal.MenteeDAO;
 import dal.SkillDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -61,6 +62,7 @@ public class Book extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String go = request.getParameter("go");
+
         if("changeDate".equals(go)){
             Date date = new Date(request.getParameter("startDate"));
             int incrementNumber = Integer.parseInt(request.getParameter("incrementNumber"));
@@ -121,7 +123,8 @@ public class Book extends HttpServlet {
             }catch(Exception e){
                 e.printStackTrace();
             }
-        } else if ("changeSlotDate".equals(go)) {
+        }
+        else if ("changeSlotDate".equals(go)) {
             Date date = new Date(request.getParameter("startDate"));
             int incrementNumber = Integer.parseInt(request.getParameter("incrementNumber"));
             String mentorId = request.getParameter("mentorId");
@@ -338,12 +341,16 @@ public class Book extends HttpServlet {
                 e.printStackTrace();
             }
 
-        } else if("book-time".equals(go)){
+        }
+        else if("book-time".equals(go)){
             String mentorId = request.getParameter("mentor-id");
-            String userId = request.getParameter("user-id");
+            int userId = ((Users) request.getSession().getAttribute("users")).getUserId();
             String skill = request.getParameter("skill");
             int skillId = new SkillDAO().getSkillIdByName(skill);
-            Booking booking = new Booking(Integer.parseInt(mentorId), ((Users) request.getSession().getAttribute("users")).getUserId(), skillId, "Pending");
+            String menteeId = new MenteeDAO().getMenteeIdbyUserId(String.valueOf(userId));
+
+            Booking booking = new Booking(Integer.parseInt(mentorId), Integer.parseInt(menteeId) , skillId, "Pending");
+
             System.out.println(new BookingDAO().addBooking(booking) + " rows affected");
             int bookingId = new BookingDAO().getBookingIdByBooking(booking);
             for(String day : days){
@@ -355,6 +362,8 @@ public class Book extends HttpServlet {
                     }
                 }
             }
+
+
         }
 
     }

@@ -11,7 +11,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
-import model.Booking;
 
 /**
  *
@@ -28,11 +27,11 @@ public class BookingDAO {
 
     private final String GET_BOOKINGID_BY_BOOKING = "SELECT * FROM [dbo].[Booking] WHERE mentorId = ? AND menteeId = ? AND skillId = ? AND status = ?";
 
-    public static void main(String[] args) {
-        Booking b = new Booking(1, 3, 13, "Pending");
-        System.out.println(new BookingDAO().addBooking(b));
-        System.out.println("The id is: " + new BookingDAO().getBookingIdByBooking(b));
 
+    public static void main(String[] args) {
+        Booking booking = new Booking(1, 2, 1, "Pending");
+        BookingDAO bookingDAO = new BookingDAO();
+        System.out.println(bookingDAO.addBooking(booking));
     }
 
     public int getBookingIdByBooking(Booking booking) {
@@ -186,4 +185,20 @@ public class BookingDAO {
     }
 
 
+
+    public List<Booking> getBookingsByMentorId(int mentorId) {
+        List<Booking> list = new ArrayList<>();
+        String query = "select * from Booking where mentorId = " + mentorId;
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                list.add(new Booking(rs.getInt(1), rs.getInt(2), rs.getInt(3), rs.getInt(4), rs.getString(5)));
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return list;
+    }
 }
