@@ -4,3 +4,5 @@
 /CodeCoach/dist/
 /CodeCoach/nbbuild/
 /CodeCoach/out
+/out
+.idea
