@@ -1,9 +1,6 @@
 package controller.booking;
 
-import dal.BookingDAO;
-import dal.BookingDetailDAO;
-import dal.MenteeDAO;
-import dal.SkillDAO;
+import dal.*;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -11,6 +8,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import model.Booking;
 import model.BookingDetails;
+import model.Notifications;
 import model.Users;
 
 import java.io.IOException;
@@ -363,7 +361,13 @@ public class Book extends HttpServlet {
                 }
             }
 
-
+            Notifications notification = new Notifications();
+            notification.setUserId(Integer.parseInt(mentorId));
+            notification.setContent("You have a new booking request");
+            notification.setDateTime(new Date().toString());
+            notification.setStatus("Pending");
+            notification.setType("Booking");
+            new NotificationDAO().addNotification(notification);
         }
 
     }
