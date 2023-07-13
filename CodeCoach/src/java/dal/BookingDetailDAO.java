@@ -4,12 +4,14 @@
  */
 package dal;
 
+import controller.booking.Book;
 import model.BookingDetails;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +24,20 @@ public class BookingDetailDAO {
     Connection conn = null;
     PreparedStatement ps = null;
     ResultSet rs = null;
+
+    public static String getCurrentDate() {
+        DateFormat dateFormat = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return dateFormat.format(new java.util.Date());
+    }
+
+    //10/07/2023 to 2023-07-10
+    public static String formatDate(String date){
+String[] arr = date.split("/");
+        return arr[2] + "-" + arr[1] + "-" + arr[0];
+    }
+
+
+
 
     private final String ADD_BOOKING_DETAIL = "INSERT INTO [dbo].[BookingDetails] (bookingId, slotId, date) VALUES (?,?,?)";
 

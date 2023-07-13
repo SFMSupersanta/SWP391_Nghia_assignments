@@ -1,4 +1,4 @@
--- SELECT * FROM USERS
+-- SELECT * FROM Booking
 -- CREATE DATABASE CodeCoach
 -- DROP DATABASE CodeCoach
 /*

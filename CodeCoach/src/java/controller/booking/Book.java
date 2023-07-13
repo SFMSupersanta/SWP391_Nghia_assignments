@@ -13,6 +13,7 @@ import model.Users;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -355,7 +356,7 @@ public class Book extends HttpServlet {
                 for(int i = 1; i <= 7; i++){
                     String slot = request.getParameter(day + "-" + i);
                     if(slot != null){
-                        BookingDetails bookingDetails = new BookingDetails(bookingId, i, slot);
+                        BookingDetails bookingDetails = new BookingDetails(bookingId, i, BookingDetailDAO.formatDate(slot));
                         System.out.println(new BookingDetailDAO().addBookingDetail(bookingDetails) + " rows affected");
                     }
                 }
@@ -364,11 +365,17 @@ public class Book extends HttpServlet {
             Notifications notification = new Notifications();
             notification.setUserId(Integer.parseInt(mentorId));
             notification.setContent("You have a new booking request");
-            notification.setDateTime(new Date().toString());
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            notification.setDateTime(dateFormat.format(new Date()));
             notification.setStatus("Pending");
             notification.setType("Booking");
+            notification.setBookingId(new BookingDAO().getLatestBookingID());
             new NotificationDAO().addNotification(notification);
+
+            response.sendRedirect("home");
         }
+
+
 
     }
 

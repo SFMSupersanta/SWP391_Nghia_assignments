@@ -27,6 +27,24 @@ public class BookingDAO {
 
     private final String GET_BOOKINGID_BY_BOOKING = "SELECT * FROM [dbo].[Booking] WHERE mentorId = ? AND menteeId = ? AND skillId = ? AND status = ?";
 
+    private final String GET_LATEST_BOOKING_ID = "SELECT TOP 1 bookingId\n" +
+            "FROM Booking\n" +
+            "ORDER BY bookingId DESC;";
+
+    public int getLatestBookingID(){
+        try (Connection conn = new DBContext().getConnection();
+             PreparedStatement ps = conn.prepareStatement(GET_LATEST_BOOKING_ID)) {
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("bookingId");
+            }
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return -1;
+    }
+
 
     public static void main(String[] args) {
         Booking booking = new Booking(1, 2, 1, "Pending");
