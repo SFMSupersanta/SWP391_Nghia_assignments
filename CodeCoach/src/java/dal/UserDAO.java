@@ -1,11 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package dal;
-
-import model.Roles;
-import model.Users;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -13,6 +6,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import model.QuanHuyen;
+import model.Roles;
+import model.TinhThanhPho;
+import model.Users;
 
 /**
  *
@@ -23,58 +20,8 @@ public class UserDAO extends DBContext {
     Connection conn = null;
     PreparedStatement ps = null;
     ResultSet rs = null;
-    
-    private final String EDIT_USER_PROFILE_SQL = "UPDATE Users SET email = ?, [password] = ?, fName = ?, lName = ?, gender = ?, phoneNum = ?, roleId = ?, statusId = ?, address = ?, maqh = ?, facebook = ? WHERE userId = ?;\n";
 
-    public int updateUsers(Users user){
-        int result = 0;
-        try {
-            conn = new DBContext().getConnection();
-            ps = conn.prepareStatement(EDIT_USER_PROFILE_SQL);
-            ps.setString(1, user.getEmail());
-            ps.setString(2, user.getPassword());
-            ps.setString(3, user.getfName());
-            ps.setString(4, user.getlName());
-            ps.setString(5, user.getGender());
-            ps.setString(6, user.getPhoneNum());
-            ps.setInt(7, user.getRoleId());
-            ps.setInt(8, user.getStatusId());
-            ps.setString(9, user.getAddress());
-            ps.setString(10, user.getMaqh());
-            ps.setString(11, user.getFacebook());
-            ps.setInt(12, user.getUserId());
-            result = ps.executeUpdate();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return result;
-    }
-    
-    private final String GET_USER_BY_ID = "SELECT * FROM Users WHERE userId = ?";
-
-    public Users getUserById(int userId) {
-        Users user = new Users();
-        try {
-            conn = new DBContext().getConnection();
-            ps = conn.prepareStatement(GET_USER_BY_ID);
-            ps.setInt(1, userId);
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                user = new Users(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5),
-                        rs.getString(6), rs.getString(7), rs.getInt(8), rs.getInt(9), rs.getString(10), rs.getString(11),
-                        rs.getString(12));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return user;
-    }
-
-
-
-     public List<Users> getAllUser() {
+    public List<Users> getAllUser() {
         List<Users> listUsers = new ArrayList<>();
         String querry = "select * from Users";
         try {
@@ -222,10 +169,10 @@ public class UserDAO extends DBContext {
     public List<Object[]> getAllUserInfoOfMentor() {
         List<Object[]> list = new ArrayList<>();
 
-        String query = "select m.mentorId, m.userId, m.bio, m.hourlyRate, u.email, u.password, u.fName, u.lName, u.gender, u.phoneNum, u.roleId, u.statusId, u.address, u.maqh, u.facebook, qh.name, ttp.name from mentors m join users u on m.userId = u.userId join quanhuyen qh on u.maqh = qh.maqh join tinhthanhpho ttp on qh.mattp = ttp.mattp";
+        String querry = "select m.mentorId, m.userId, m.bio, m.hourlyRate, u.email, u.password, u.fName, u.lName, u.gender, u.phoneNum, u.roleId, u.statusId, u.address, u.maqh, u.facebook, qh.name, ttp.name from mentors m join users u on m.userId = u.userId join quanhuyen qh on u.maqh = qh.maqh join tinhthanhpho ttp on qh.mattp = ttp.mattp";
         try {
             conn = new DBContext().getConnection();
-            ps = conn.prepareStatement(query);
+            ps = conn.prepareStatement(querry);
             rs = ps.executeQuery();
             while (rs.next()) {
                 Object[] userInfo = new Object[17];
@@ -287,8 +234,62 @@ public class UserDAO extends DBContext {
         return o;
     }
 
+    public List<Users> getInforUserById(int userId) {
+        List<Users> listUser = new ArrayList<>();
+        String query = "select * from Users u inner join quanhuyen q\n"
+                + "on u.maqh=q.maqh\n"
+                + "inner join tinhthanhpho tp\n"
+                + "on q.mattp=tp.mattp\n"
+                + "where u.userId=?";
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setInt(1, userId);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+
+                Users users = new Users();
+                users.setfName(rs.getString("fName"));
+                users.setlName(rs.getString("lName"));
+
+                users.setEmail(rs.getString("email"));
+                users.setAddress(rs.getString("address"));
+                users.setPhoneNum(rs.getString("phoneNum"));
+                users.setAvatar(rs.getString("avatar"));
+
+                QuanHuyen quanhuyen = new QuanHuyen();
+                quanhuyen.setName(rs.getString("name"));
+
+                TinhThanhPho tinhthanhpho = new TinhThanhPho();
+                tinhthanhpho.setName(rs.getString(19));
+
+                users.setQuanhuyen(quanhuyen);
+                users.setTinhthanhpho(tinhthanhpho);
+
+                listUser.add(users);
+            }
+        } catch (Exception e) {
+        }
+        return listUser;
+    }
+
+    public boolean updateInforUserById(int userId, String fname, String lname, String address, String phone, String maqh,String avatar) {
+        String query = "UPDATE [dbo].[Users]\n"
+                + "SET fName = '" + fname + "', lName = '" + lname + "',avatar='"+avatar+"', [address] = '" + address + "', phoneNum = '" + phone + "', maqh = '" + maqh + "'\n"
+                + "WHERE userId = " + userId;
+
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.executeUpdate();
+            return true;
+        } catch (Exception e) {
+        } 
+        return false;
+    }
+
     public void updateRoleIdUser(String userId) {
-        String query = "UPDATE [dbo].[Users] SET [roleId] = 2 WHERE userId = "+userId+"";
+        String query = "UPDATE [dbo].[Users] SET [roleId] = 2 WHERE userId = " + userId + "";
         try {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(query);
@@ -297,88 +298,11 @@ public class UserDAO extends DBContext {
         }
     }
 
-    public Object[] getUserInfoByMenteeId(int menteeId) {
-        Object[] o = new Object[15];
-        String query = "select m.menteeId, m.userId, u.email, u.password, u.fName, u.lName, u.gender, u.phoneNum, u.roleId, u.statusId, u.address, u.maqh, u.facebook, qh.name, ttp.name from mentees m join users u on m.userId = u.userId join quanhuyen qh on u.maqh = qh.maqh join tinhthanhpho ttp on qh.mattp = ttp.mattp where m.menteeId =?";
-        try {
-            conn = new DBContext().getConnection();
-            ps = conn.prepareStatement(query);
-            ps.setInt(1, menteeId);
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                o[0] = rs.getInt(1);
-                o[1] = rs.getInt(2);
-                o[2] = rs.getString(3);
-                o[3] = rs.getInt(4);
-                o[4] = rs.getString(5);
-                o[5] = rs.getString(6);
-                o[6] = rs.getString(7);
-                o[7] = rs.getString(8);
-                o[8] = rs.getString(9);
-                o[9] = rs.getString(10);
-                o[10] = rs.getInt(11);
-                o[11] = rs.getInt(12);
-                o[12] = rs.getString(13);
-                o[13] = rs.getInt(14);
-                o[14] = rs.getString(15);
-                o[15] = rs.getString(16);
-            }
-        } catch (Exception e) {
-
-        }
-        return o;
+    public static void main(String[] args) {
+        UserDAO dao = new UserDAO();
+//        Object[] o = dao.getUserInfoByMentorId(1);
+//        for (int i = 0; i < o.length; i++) {
+//            System.out.println(o[i]);
+//        }
     }
-
-
-
-    public String getUserNameByUserId(int userId) {
-        String fullName = "";
-        String query = "Select fName, lName from Users where userId= " + userId + "";
-        try {
-            conn = new DBContext().getConnection();
-            ps = conn.prepareStatement(query);
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                fullName = rs.getString(1) + " " + rs.getString(2);
-            }
-        } catch (Exception e) {
-        }
-        return fullName;
-    }
-
-    public int getTotalUserByRoleId(int roleId) {
-        String query = "select count(userid) as Total from users where roleId =" + roleId + "";
-        try {
-            int total = 0;
-            conn = new DBContext().getConnection();
-            ps = conn.prepareStatement(query);
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                total = rs.getInt("Total");
-                return total;
-            }
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-        return 0;
-    }
-
-    public int getTotalUsers(){
-        String query = "select count(userid) as Total from users";
-        try {
-            int total = 0;
-            conn = new DBContext().getConnection();
-            ps = conn.prepareStatement(query);
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                total = rs.getInt("Total");
-                return total;
-            }
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-        return 0;
-    }
-
-
 }
